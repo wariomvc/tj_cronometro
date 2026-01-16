@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/configuration_screen.dart';
+import 'screens/timer_screen.dart';
 
 void main() {
   runApp(const TjCronometroApp());
@@ -17,7 +17,7 @@ class TjCronometroApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ConfigurationScreen(),
+      home: const TimerScreen(),
     );
   }
 }

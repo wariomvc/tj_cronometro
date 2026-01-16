@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import '../utils/time_formatter.dart';
 
-class CountdownDisplay extends StatelessWidget {
-  final Duration remainingTime;
+class TimerDisplay extends StatelessWidget {
+  final Duration elapsedTime;
   final bool isRunning;
 
-  const CountdownDisplay({
+  const TimerDisplay({
     super.key,
-    required this.remainingTime,
+    required this.elapsedTime,
     required this.isRunning,
   });
 
   @override
   Widget build(BuildContext context) {
-    final timeString = TimeFormatter.formatDuration(remainingTime);
+    final timeString = TimeFormatter.formatDuration(elapsedTime);
     final screenSize = MediaQuery.of(context).size;
 
     // Calculate font size based on screen width (responsive)
@@ -36,12 +36,10 @@ class CountdownDisplay extends StatelessWidget {
   }
 
   Color _getBackgroundColor() {
-    if (remainingTime.inSeconds <= 0) {
-      return Colors.red.shade700;
-    } else if (remainingTime.inSeconds <= 30) {
-      return Colors.orange.shade700;
-    } else if (isRunning) {
+    if (isRunning) {
       return Colors.green.shade700;
+    } else if (elapsedTime.inSeconds > 0) {
+      return Colors.orange.shade700;
     } else {
       return Colors.blueGrey.shade700;
     }

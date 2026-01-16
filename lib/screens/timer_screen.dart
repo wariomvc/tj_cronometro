@@ -1,29 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../widgets/countdown_display.dart';
+import '../widgets/timer_display.dart';
 
-class CountdownScreen extends StatefulWidget {
-  final int durationMinutes;
-
-  const CountdownScreen({
-    super.key,
-    required this.durationMinutes,
-  });
+class TimerScreen extends StatefulWidget {
+  const TimerScreen({super.key});
 
   @override
-  State<CountdownScreen> createState() => _CountdownScreenState();
+  State<TimerScreen> createState() => _TimerScreenState();
 }
 
-class _CountdownScreenState extends State<CountdownScreen> {
-  late Duration _remainingTime;
+class _TimerScreenState extends State<TimerScreen> {
+  Duration _elapsedTime = Duration.zero;
   Timer? _timer;
   bool _isRunning = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _remainingTime = Duration(minutes: widget.durationMinutes);
-  }
 
   @override
   void dispose() {
@@ -40,11 +29,7 @@ class _CountdownScreenState extends State<CountdownScreen> {
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        if (_remainingTime.inSeconds > 0) {
-          _remainingTime = _remainingTime - const Duration(seconds: 1);
-        } else {
-          _stopTimer();
-        }
+        _elapsedTime = _elapsedTime + const Duration(seconds: 1);
       });
     });
   }
@@ -59,7 +44,7 @@ class _CountdownScreenState extends State<CountdownScreen> {
   void _resetTimer() {
     _stopTimer();
     setState(() {
-      _remainingTime = Duration(minutes: widget.durationMinutes);
+      _elapsedTime = Duration.zero;
     });
   }
 
@@ -68,9 +53,9 @@ class _CountdownScreenState extends State<CountdownScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Full-screen countdown display
-          CountdownDisplay(
-            remainingTime: _remainingTime,
+          // Full-screen timer display
+          TimerDisplay(
+            elapsedTime: _elapsedTime,
             isRunning: _isRunning,
           ),
 
@@ -108,24 +93,6 @@ class _CountdownScreenState extends State<CountdownScreen> {
                   color: Colors.blue,
                 ),
               ],
-            ),
-          ),
-
-          // Back button at top-left
-          Positioned(
-            top: 16,
-            left: 16,
-            child: SafeArea(
-              child: IconButton(
-                onPressed: () {
-                  _stopTimer();
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back, color: Colors.white, size: 32),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.black45,
-                ),
-              ),
             ),
           ),
         ],
