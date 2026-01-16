@@ -1,11 +1,5 @@
 # Netlify configuration for Flutter Web deployment
 
-[[plugins]]
-
-  package = "netlify-plugin-flutter"
-
-   [plugins.inputs]
-    channel = "stable"
 
 [build]
 
