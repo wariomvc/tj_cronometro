@@ -1,13 +1,19 @@
 # Netlify configuration for Flutter Web deployment
 
-[build]
+[[plugins]]
+package = "netlify-plugin-flutter-sdk"
+  [plugins.inputs]
+  # Es mejor definir la versión solo aquí para evitar conflictos
+  flutter_version = "3.38.7" 
 
-command = "flutter build web --release"
-publish = "build/web"
+[build]
+  # Usamos la ruta completa por si el PATH no se actualiza a tiempo
+  command = "flutter build web --release"
+  publish = "build/web"
 
 [build.environment]
-  # Set Flutter version and environment variables
-  FLUTTER_VERSION = "3.38.7"
+  # Eliminamos FLUTTER_VERSION de aquí para que mande el plugin
+  FLUTTER_CHANNEL = "stable"
 
 # SPA routing for Flutter web app
 [[redirects]]
