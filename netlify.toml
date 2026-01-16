@@ -1,7 +1,7 @@
 # Netlify configuration for Flutter Web deployment
 
 [[plugins]]
-package = "netlify-plugin-flutter-sdk"
+package = "netlify-plugin-flutter"
   [plugins.inputs]
   # Es mejor definir la versión solo aquí para evitar conflictos
   flutter_version = "3.38.7" 
