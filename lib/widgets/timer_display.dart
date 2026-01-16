@@ -14,23 +14,30 @@ class TimerDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeString = TimeFormatter.formatDuration(elapsedTime);
-    final screenSize = MediaQuery.of(context).size;
-
-    // Calculate font size based on screen width (responsive)
-    final fontSize = screenSize.width * 0.25;
 
     return Container(
       color: _getBackgroundColor(),
-      child: Center(
-        child: Text(
-          timeString,
-          style: TextStyle(
-            fontSize: fontSize.clamp(48.0, 300.0),
-            fontWeight: FontWeight.bold,
-            fontFamily: 'monospace',
-            color: Colors.white,
-          ),
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Center(
+            child: SizedBox(
+              width: constraints.maxWidth * 0.95,
+              height: constraints.maxHeight * 0.9,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Text(
+                  timeString,
+                  style: TextStyle(
+                    fontSize: 300,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'monospace',
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
