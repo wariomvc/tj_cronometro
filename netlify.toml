@@ -4,7 +4,7 @@
 package = "netlify-plugin-flutter"
   [plugins.inputs]
   # Es mejor definir la versión solo aquí para evitar conflictos
-  flutter_version = "stable" 
+  channel = "stable"
 
 [build]
   # Usamos la ruta completa por si el PATH no se actualiza a tiempo
