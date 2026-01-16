@@ -1,14 +1,16 @@
 # Netlify configuration for Flutter Web deployment
 
-[build]
-  # Directory to publish (output of flutter build web)
-  publish = "build/web"
-  # Build command
-  command = "flutter build web --release"
+[[plugins]]
 
-# Install Flutter as a dependency
-[build.environment]
-  FLUTTER_VERSION = "3.24.5"
+  package = "netlify-plugin-flutter"
+
+   [plugins.inputs]
+    channel = "stable"
+
+[build]
+
+command = "flutter build web --release"
+publish = "build/web"
 
 # SPA routing for Flutter web app
 [[redirects]]
