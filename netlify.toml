@@ -1,10 +1,13 @@
 # Netlify configuration for Flutter Web deployment
 
-
 [build]
 
 command = "flutter build web --release"
 publish = "build/web"
+
+[build.environment]
+  # Set Flutter version and environment variables
+  FLUTTER_VERSION = "3.38.7"
 
 # SPA routing for Flutter web app
 [[redirects]]
