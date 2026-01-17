@@ -13,6 +13,7 @@ class _TimerScreenState extends State<TimerScreen> {
   Duration _elapsedTime = Duration.zero;
   Timer? _timer;
   bool _isRunning = false;
+  int? _timeLimitMinutes; // Optional time limit in minutes
 
   @override
   void dispose() {
@@ -48,6 +49,68 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
+  Future<void> _showTimeLimitDialog() async {
+    final TextEditingController controller = TextEditingController(
+      text: _timeLimitMinutes?.toString() ?? '',
+    );
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Límite de Tiempo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Ingresa el límite de tiempo en minutos (opcional):'),
+              const SizedBox(height: 16),
+              TextField(
+                controller: controller,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Minutos',
+                  hintText: 'Ej: 5, 10, 30...',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _timeLimitMinutes = null;
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Borrar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final value = int.tryParse(controller.text);
+                if (value != null && value > 0) {
+                  setState(() {
+                    _timeLimitMinutes = value;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+              child: const Text('Guardar'),
+            ),
+          ],
+        );
+      },
+    );
+    controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,15 +120,55 @@ class _TimerScreenState extends State<TimerScreen> {
           TimerDisplay(
             elapsedTime: _elapsedTime,
             isRunning: _isRunning,
+            timeLimitMinutes: _timeLimitMinutes,
           ),
 
-          // Control buttons overlay at bottom
+          // Settings button at top right
           Positioned(
-            bottom: 48,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            top: 48,
+            right: 24,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: IconButton(
+                onPressed: _showTimeLimitDialog,
+                icon: const Icon(Icons.settings, size: 32),
+                color: Colors.white,
+                tooltip: 'Configurar límite de tiempo',
+              ),
+            ),
+          ),
+
+          // Time limit indicator (if set)
+          if (_timeLimitMinutes != null)
+            Positioned(
+              top: 48,
+              left: 24,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'Límite: $_timeLimitMinutes min',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+          // Control buttons overlay at bottom left
+          Positioned(
+            bottom: 32,
+            left: 24,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Start Button
                 _buildControlButton(
@@ -74,7 +177,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   label: 'Iniciar',
                   color: Colors.green,
                 ),
-                const SizedBox(width: 24),
+                const SizedBox(height: 12),
 
                 // Stop Button
                 _buildControlButton(
@@ -83,7 +186,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   label: 'Parar',
                   color: Colors.red,
                 ),
-                const SizedBox(width: 24),
+                const SizedBox(height: 12),
 
                 // Reset Button
                 _buildControlButton(
